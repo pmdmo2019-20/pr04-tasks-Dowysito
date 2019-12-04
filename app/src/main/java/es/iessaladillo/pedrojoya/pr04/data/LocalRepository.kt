@@ -41,7 +41,7 @@ object LocalRepository: Repository{
         list.remove(list.filter { x -> x.id==taskId }.last())
     }
 
-    override fun deleteTasks(taskIdList: List<Long>) {
+    override fun deleteTasks(taskIdList: List<Long>) { 
         taskIdList.forEach { list.remove(list.filter { x -> x.id==it }.last()) }
     }
 

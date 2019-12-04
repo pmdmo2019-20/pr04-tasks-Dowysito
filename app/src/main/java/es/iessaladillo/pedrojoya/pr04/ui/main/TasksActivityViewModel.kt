@@ -172,13 +172,13 @@ class TasksActivityViewModel(private val repository: Repository,
     // Pide las tareas al repositorio, atendiendo al filtro recibido
     private fun queryTasks(filter: TasksActivityFilter) {
         if(filter == TasksActivityFilter.ALL){
-            _tasks.value = repository.queryAllTasks().sortedByDescending { it.id }
+            _tasks.value = repository.queryAllTasks()
         }
         else if(filter == TasksActivityFilter.COMPLETED){
-            _tasks.value = repository.queryCompletedTasks().sortedByDescending { it.id }
+            _tasks.value = repository.queryCompletedTasks()
         }
         else if(filter == TasksActivityFilter.PENDING) {
-            _tasks.value = repository.queryPendingTasks().sortedByDescending { it.id }
+            _tasks.value = repository.queryPendingTasks()
         }
     }
 

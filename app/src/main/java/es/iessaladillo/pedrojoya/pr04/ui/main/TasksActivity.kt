@@ -10,10 +10,7 @@ import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.google.android.material.snackbar.Snackbar
 import es.iessaladillo.pedrojoya.pr04.R
 import es.iessaladillo.pedrojoya.pr04.base.observeEvent
@@ -29,7 +26,7 @@ import kotlinx.android.synthetic.main.tasks_activity.*
 class TasksActivity : AppCompatActivity() {
 
     private var mnuFilter: MenuItem? = null
-    private val localRepository:Repository = LocalRepository()
+    private val localRepository = LocalRepository
     private val viewModel: TasksActivityViewModel by viewModels{TasksActivityViewModelFactory(localRepository,application)}
     private val listAdapter: TasksActivityAdapter = TasksActivityAdapter().also {
         it.setOnItemClickListener {position ->
@@ -41,6 +38,8 @@ class TasksActivity : AppCompatActivity() {
             viewModel.updateTaskCompletedState(task,task.completed)
         }
     }
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,6 +119,7 @@ class TasksActivity : AppCompatActivity() {
     private fun showTasks(tasks: List<Task>) {
         lstTasks.post {
             listAdapter.submitList(tasks)
+            listAdapter.notifyDataSetChanged()
             lblEmptyView.invisibleUnless(tasks.isEmpty())
         }
     }

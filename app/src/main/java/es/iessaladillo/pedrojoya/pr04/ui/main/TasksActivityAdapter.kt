@@ -29,9 +29,6 @@ class TasksActivityAdapter : RecyclerView.Adapter<TasksActivityAdapter.ViewHolde
     private var onItemClickListener: ((Int) -> Unit)? = null
     private var onCheckboxClickListener: ((Int) -> Unit)? = null
 
-    init {
-        setHasStableIds(true)
-    }
 
     fun getItem(position: Int):Task{
         return data[position]

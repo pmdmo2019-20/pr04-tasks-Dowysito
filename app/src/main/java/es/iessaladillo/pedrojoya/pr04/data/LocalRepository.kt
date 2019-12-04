@@ -12,20 +12,20 @@ import java.util.*
 //  usando una lista mutable para almacenar las tareas.
 //  Los id de las tareas se irán generando secuencialmente a partir del valor 1 conforme
 //  se van agregando tareas (add).
-class LocalRepository: Repository{
+object LocalRepository: Repository{
 
     private var list:MutableList<Task> = mutableListOf()
 
     override fun queryAllTasks(): List<Task> {
-        return list
+        return list.sortedByDescending { it.id }
     }
 
     override fun queryCompletedTasks(): List<Task> {
-        return list.filter { x -> x.completed }
+        return list.filter { x -> x.completed }.sortedByDescending { it.id }
     }
 
     override fun queryPendingTasks(): List<Task> {
-        return list.filter { x -> !x.completed }
+        return list.filter { x -> !x.completed }.sortedByDescending { it.id }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -38,33 +38,48 @@ class LocalRepository: Repository{
     }
 
     override fun deleteTask(taskId: Long) {
-        list.remove(list[taskId.toInt()])
+        list.remove(list.filter { x -> x.id==taskId }.last())
     }
 
     override fun deleteTasks(taskIdList: List<Long>) {
-        taskIdList.forEach { list.remove(list[it.toInt()]) }
+        taskIdList.forEach { list.remove(list.filter { x -> x.id==it }.last()) }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun markTaskAsCompleted(taskId: Long) {
-        list[taskId.toInt()].completed=true
-        list[taskId.toInt()].completedAt="Completed at: " + Date().toString()
+        list.forEach {
+            if (it.id==taskId){
+                it.completed=true
+                it.completedAt="Completed at: " + Date().toString()
+            }
+        }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun markTasksAsCompleted(taskIdList: List<Long>) {
-        taskIdList.forEach {
-            list[it.toInt()].completed=true
-            list[it.toInt()].completedAt="Completed at: " + Date().toString()
+        list.forEach {
+            if(taskIdList.contains(it.id)){
+                it.completed=true
+                it.completedAt="Completed at: " + Date().toString()
+            }
         }
     }
 
     override fun markTaskAsPending(taskId: Long) {
-        list[taskId.toInt()].completed=false
+        list.forEach {
+            if (it.id==taskId){
+                it.completed=false
+            }
+        }
     }
 
     override fun markTasksAsPending(taskIdList: List<Long>) {
-        taskIdList.forEach { list[it.toInt()].completed=false }
+        list.forEach {
+            if(taskIdList.contains(it.id)){
+                it.completed=false
+            }
+        }
     }
 
 }
